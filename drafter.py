@@ -15,6 +15,8 @@ pitch_data.close()
  #
  
 def stat_sum():	
+	allw=[];allera=[];allsv=[];allip=[];allso=[];allwhip=[]
+	allhr=[];allr=[];allrbi=[];allsb=[];allave=[];allobp=[]
 	for team in team_list:
 		pitch = []
 		hit = []
@@ -34,7 +36,14 @@ def stat_sum():
 			ip = ip + int(line[3])
 			so = so + int(line[4])			
 			whip = whip + float(line[5])/int(line[3])
-		team.stats.append([w, era, sv, ip, so, whip])
+		team.stats.append([w,era,sv,ip,so,whip])
+		#print(team.stats)
+		allw.append(w)
+		allera.append(era)
+		allsv.append(sv)
+		allip.append(ip)
+		allso.append(so)
+		allwhip.append(whip)
 		
 		for line in hit:
 			hr = hr + int(line[1])
@@ -44,8 +53,236 @@ def stat_sum():
 			ave = ave + float(line[5])*int(line[0])
 			obp = obp + float(line[6])*int(line[0])
 		team.stats.append([hr,r,rbi,sb,ave,obp])
+		allhr.append(hr)
+		allr.append(r)
+		allrbi.append(rbi)
+		allsb.append(sb)
+		allave.append(ave)
+		allobp.append(obp)
+	#print(sorted(allsv))
+	for team in team_list:
+		if team.stats[0][0] == sorted(allw)[0]:
+			team.points+=1
+		elif team.stats[0][0] == sorted(allw)[1]:
+			team.points+=2
+		elif team.stats[0][0] == sorted(allw)[2]:
+			team.points+=3
+		elif team.stats[0][0] == sorted(allw)[3]:
+			team.points+=4
+		elif team.stats[0][0] == sorted(allw)[4]:
+			team.points+=5
+		elif team.stats[0][0] == sorted(allw)[5]:
+			team.points+=6
+		elif team.stats[0][0] == sorted(allw)[6]:
+			team.points+=7
+		elif team.stats[0][0] == sorted(allw)[7]:
+			team.points+=8
+			
+		if team.stats[0][1] == sorted(allera, reverse=True)[0]:
+			team.points+=1
+		elif team.stats[0][1] == sorted(allera, reverse= True)[1]:
+			team.points+=2
+		elif team.stats[0][1] == sorted(allera, reverse= True)[2]:
+			team.points+=3
+		elif team.stats[0][1] == sorted(allera, reverse= True)[3]:
+			team.points+=4
+		elif team.stats[0][1] == sorted(allera, reverse= True)[4]:
+			team.points+=5
+		elif team.stats[0][1] == sorted(allera, reverse= True)[5]:
+			team.points+=6
+		elif team.stats[0][1] == sorted(allera, reverse= True)[6]:
+			team.points+=7
+		elif team.stats[0][1] == sorted(allera, reverse= True)[7]:
+			team.points+=8
 		
-		#need to add compare of all stats to award point
+		if team.stats[0][2] == sorted(allsv)[0]:
+			team.points+=1
+		elif team.stats[0][2] == sorted(allsv)[1]:
+			team.points+=2
+		elif team.stats[0][2] == sorted(allsv)[2]:
+			team.points+=3
+		elif team.stats[0][2] == sorted(allsv)[3]:
+			team.points+=4
+		elif team.stats[0][2] == sorted(allsv)[4]:
+			team.points+=5
+		elif team.stats[0][2] == sorted(allsv)[5]:
+			team.points+=6
+		elif team.stats[0][2] == sorted(allsv)[6]:
+			team.points+=7
+		elif team.stats[0][2] == sorted(allsv)[7]:
+			team.points+=8
+			
+		if team.stats[0][3] == sorted(allip)[0]:
+			team.points+=1
+		elif team.stats[0][3] == sorted(allip)[1]:
+			team.points+=2
+		elif team.stats[0][3] == sorted(allip)[2]:
+			team.points+=3
+		elif team.stats[0][3] == sorted(allip)[3]:
+			team.points+=4
+		elif team.stats[0][3] == sorted(allip)[4]:
+			team.points+=5
+		elif team.stats[0][3] == sorted(allip)[5]:
+			team.points+=6
+		elif team.stats[0][3] == sorted(allip)[6]:
+			team.points+=7
+		elif team.stats[0][3] == sorted(allip)[7]:
+			team.points+=8
+		
+		if team.stats[0][4] == sorted(allso)[0]:
+			team.points+=1
+		elif team.stats[0][4] == sorted(allso)[1]:
+			team.points+=2
+		elif team.stats[0][4] == sorted(allso)[2]:
+			team.points+=3
+		elif team.stats[0][4] == sorted(allso)[3]:
+			team.points+=4
+		elif team.stats[0][4] == sorted(allso)[4]:
+			team.points+=5
+		elif team.stats[0][4] == sorted(allso)[5]:
+			team.points+=6
+		elif team.stats[0][4] == sorted(allso)[6]:
+			team.points+=7
+		elif team.stats[0][4] == sorted(allso)[7]:
+			team.points+=8
+			
+		if team.stats[0][5] == sorted(allwhip, reverse=True)[0]:
+			team.points+=1
+		elif team.stats[0][5] == sorted(allwhip, reverse= True)[1]:
+			team.points+=2
+		elif team.stats[0][5] == sorted(allwhip, reverse= True)[2]:
+			team.points+=3
+		elif team.stats[0][5] == sorted(allwhip, reverse= True)[3]:
+			team.points+=4
+		elif team.stats[0][5] == sorted(allwhip, reverse= True)[4]:
+			team.points+=5
+		elif team.stats[0][5] == sorted(allwhip, reverse= True)[5]:
+			team.points+=6
+		elif team.stats[0][5] == sorted(allwhip, reverse= True)[6]:
+			team.points+=7
+		elif team.stats[0][5] == sorted(allwhip, reverse= True)[7]:
+			team.points+=8
+			
+		if team.stats[1][0] == sorted(allhr)[0]:
+			team.points+=1
+		elif team.stats[1][0] == sorted(allhr)[1]:
+			team.points+=2
+		elif team.stats[1][0] == sorted(allhr)[2]:
+			team.points+=3
+		elif team.stats[1][0] == sorted(allhr)[3]:
+			team.points+=4
+		elif team.stats[1][0] == sorted(allhr)[4]:
+			team.points+=5
+		elif team.stats[1][0] == sorted(allhr)[5]:
+			team.points+=6
+		elif team.stats[1][0] == sorted(allhr)[6]:
+			team.points+=7
+		elif team.stats[1][0] == sorted(allhr)[7]:
+			team.points+=8
+		
+		if team.stats[1][1] == sorted(allr)[0]:
+			team.points+=1
+		elif team.stats[1][1] == sorted(allr)[1]:
+			team.points+=2
+		elif team.stats[1][1] == sorted(allr)[2]:
+			team.points+=3
+		elif team.stats[1][1] == sorted(allr)[3]:
+			team.points+=4
+		elif team.stats[1][1] == sorted(allr)[4]:
+			team.points+=5
+		elif team.stats[1][1] == sorted(allr)[5]:
+			team.points+=6
+		elif team.stats[1][1] == sorted(allr)[6]:
+			team.points+=7
+		elif team.stats[1][1] == sorted(allr)[7]:
+			team.points+=8
+		
+		if team.stats[1][2] == sorted(allrbi)[0]:
+			team.points+=1
+		elif team.stats[1][2] == sorted(allrbi)[1]:
+			team.points+=2
+		elif team.stats[1][2] == sorted(allrbi)[2]:
+			team.points+=3
+		elif team.stats[1][2] == sorted(allrbi)[3]:
+			team.points+=4
+		elif team.stats[1][2] == sorted(allrbi)[4]:
+			team.points+=5
+		elif team.stats[1][2] == sorted(allrbi)[5]:
+			team.points+=6
+		elif team.stats[1][2] == sorted(allrbi)[6]:
+			team.points+=7
+		elif team.stats[1][2] == sorted(allrbi)[7]:
+			team.points+=8
+		
+		if team.stats[1][3] == sorted(allsb)[0]:
+			team.points+=1
+		elif team.stats[1][3] == sorted(allsb)[1]:
+			team.points+=2
+		elif team.stats[1][3] == sorted(allsb)[2]:
+			team.points+=3
+		elif team.stats[1][3] == sorted(allsb)[3]:
+			team.points+=4
+		elif team.stats[1][3] == sorted(allsb)[4]:
+			team.points+=5
+		elif team.stats[1][3] == sorted(allsb)[5]:
+			team.points+=6
+		elif team.stats[1][3] == sorted(allsb)[6]:
+			team.points+=7
+		elif team.stats[1][3] == sorted(allsb)[7]:
+			team.points+=8
+			
+		if team.stats[1][4] == sorted(allave)[0]:
+			team.points+=1
+		elif team.stats[1][4] == sorted(allave)[1]:
+			team.points+=2
+		elif team.stats[1][4] == sorted(allave)[2]:
+			team.points+=3
+		elif team.stats[1][4] == sorted(allave)[3]:
+			team.points+=4
+		elif team.stats[1][4] == sorted(allave)[4]:
+			team.points+=5
+		elif team.stats[1][4] == sorted(allave)[5]:
+			team.points+=6
+		elif team.stats[1][4] == sorted(allave)[6]:
+			team.points+=7
+		elif team.stats[1][4] == sorted(allave)[7]:
+			team.points+=8
+		
+		if team.stats[1][5] == sorted(allobp)[0]:
+			team.points+=1
+		elif team.stats[1][5] == sorted(allobp)[1]:
+			team.points+=2
+		elif team.stats[1][5] == sorted(allobp)[2]:
+			team.points+=3
+		elif team.stats[1][5] == sorted(allobp)[3]:
+			team.points+=4
+		elif team.stats[1][5] == sorted(allobp)[4]:
+			team.points+=5
+		elif team.stats[1][5] == sorted(allobp)[5]:
+			team.points+=6
+		elif team.stats[1][5] == sorted(allobp)[6]:
+			team.points+=7
+		elif team.stats[1][5] == sorted(allobp)[7]:
+			team.points+=8
+		print(team.points)
+		
+		
+#need to add compare of all stats to award point
+def rank_stats():
+	for team in team_list:
+		f=0;s=0;t=0;f=0;ft=0;s=0;st=0;e=0
+		for stat in team.stats[1]:
+			f = stat
+			if stat > f:
+				e=st
+				st=s
+				s=ft
+				ft=f
+				f=t
+				t=s
+				s=f
+				f=stat
+			print(f,s,t,f,ft,s,st,e)
 		
 def auctionPlayer(name):
 	profile = []
@@ -65,7 +302,7 @@ def auctionPlayer(name):
 	
 class Team:
 	def __init__(self, hit, cap, roster = None, hit_roster = None, pitch_roster = None, 
-	needs = None, money= None, hit_money = None, pitch_money = None, stats = None):
+	needs = None, money= None, hit_money = None, pitch_money = None, stats = None, points=0):
 		if roster is None: roster = []
 		if hit_roster is None: hit_roster = []
 		if pitch_roster is None: pitch_roster = []
@@ -84,6 +321,7 @@ class Team:
 		self.hit_money = hit_money
 		self.pitch_money = pitch_money
 		self.stats = stats
+		self.points=points
 		
 	
 def checkNeed(team):
@@ -198,9 +436,10 @@ while len(drafted) < 200:
 #	print(line)
 	
 stat_sum()	
+#rank_stats()
 #for team in team_list:
 #	print(team.needs)
 
 
-#for line in TeamF.roster:
+#for line in TeamF.stats:
 #	print(line)
