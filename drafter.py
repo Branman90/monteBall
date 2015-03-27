@@ -11,7 +11,7 @@ avail_pitch = pickle.load(pitch_data)
 pitch_data.close()
 
  #need to develop draft program 
- #change money discount to second highest bid + 1
+ #how to make the amount of money bid equal to cap times hit % of money?????
  #
  
 def auctionPlayer(name):
@@ -32,12 +32,14 @@ def auctionPlayer(name):
 	
 class Team:
 	def __init__(self, hit, cap, roster = None, hit_roster = None, pitch_roster = None, 
-	needs = None, money= None):
+	needs = None, money= None, hit_money = None, pitch_money = None):
 		if roster is None: roster = []
 		if hit_roster is None: hit_roster = []
 		if pitch_roster is None: pitch_roster = []
 		if needs is None: needs = ['C', '1B', '2B', '3B','SS','OF', 'U', 'P']
 		if money is None: money = 250
+		if hit_money is None: hit_money = (money*hit)
+		if pitch_money is None: pitch_money= (money*(1-hit))
 		
 		self.hit = hit
 		self.roster = roster
@@ -46,6 +48,8 @@ class Team:
 		self.cap = cap
 		self.needs = needs
 		self.money = money
+		self.hit_money = hit_money
+		self.pitch_money = pitch_money
 		
 	
 def checkNeed(team):
@@ -82,17 +86,16 @@ def hit_auction():
 		second_bid = None
 		#change the draft bid parameters here
 		for team in bidders:
-			if(team.cap * team.money) > (high_bid.cap * high_bid.money):
-				second_bid = (high_bid.cap * high_bid.money)
+			if(team.cap * team.hit_money) > (high_bid.cap * high_bid.hit_money):
+				second_bid = (high_bid.cap * high_bid.hit_money)
 				high_bid = team
 	
-		m = high_bid.money
-	
+		hm = high_bid.hit_money
+		
 		if second_bid:
-			high_bid.money = m - second_bid
+			high_bid.hit_money = hm - second_bid
 		else:
-			high_bid.money = m - (high_bid.cap *high_bid.money)
-			
+			high_bid.hit_money = hm - (high_bid.cap * high_bid.hit_money)
 		if position in high_bid.needs:
 			high_bid.hit_roster.append(position)
 		else:
@@ -105,6 +108,10 @@ def hit_auction():
 		
 	else:
 		del avail_hit[1]
+	
+	#print(TeamA.hit_money)
+	
+	
 	
 def pitch_auction():
 	player = avail_pitch[1]
@@ -119,23 +126,23 @@ def pitch_auction():
 	second_bid = None
 	
 	for team in bidders:
-		if (team.cap *team.money) > (high_bid.cap * high_bid.money):
-			second_bid = (high_bid.cap * high_bid.money)
+		if (team.cap *team.pitch_money) > (high_bid.cap * high_bid.pitch_money):
+			second_bid = (high_bid.cap * high_bid.pitch_money)
 			high_bid = team
 			
-	m = high_bid.money
+	m = high_bid.pitch_money
 	
 	if second_bid:
-		high_bid.money = m - second_bid
+		high_bid.pitch_money = m - second_bid
 	else:
-		high_bid.money = m - (high_bid.cap *high_bid.money)
+		high_bid.pitch_money = m - (high_bid.cap *high_bid.pitch_money)
 	
 	high_bid.pitch_roster.append(position)
 	high_bid.roster.append(player)
 	drafted.append(position)
 	del avail_pitch[1]
 	checkNeed(high_bid)
-				
+	print(TeamG.pitch_money)			
 		
 	
 			
@@ -157,8 +164,8 @@ while len(drafted) < 120:
 while len(drafted) < 200:
 	pitch_auction()
 	
-#for line in TeamA.roster:
-#	print(line)
+for line in TeamA.roster:
+	print(line)
 
 #for line in TeamB.roster:
 #	print(line)
