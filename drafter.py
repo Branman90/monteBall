@@ -11,7 +11,7 @@ avail_pitch = pickle.load(pitch_data)
 pitch_data.close()
 
  #need to develop draft program 
- #add in pitcher auction
+ #change money discount to second highest bid + 1
  #
  
 def auctionPlayer(name):
@@ -79,14 +79,20 @@ def hit_auction():
 			
 	if bidders:
 		high_bid = bidders[0]
+		second_bid = None
 		#change the draft bid parameters here
 		for team in bidders:
 			if(team.cap * team.money) > (high_bid.cap * high_bid.money):
+				second_bid = (high_bid.cap * high_bid.money)
 				high_bid = team
 	
 		m = high_bid.money
-		high_bid.money = m - (high_bid.cap *high_bid.money)
-		
+	
+		if second_bid:
+			high_bid.money = m - second_bid
+		else:
+			high_bid.money = m - (high_bid.cap *high_bid.money)
+			
 		if position in high_bid.needs:
 			high_bid.hit_roster.append(position)
 		else:
@@ -110,12 +116,19 @@ def pitch_auction():
 			bidders.append(team)
 	
 	high_bid = bidders[0]
+	second_bid = None
+	
 	for team in bidders:
 		if (team.cap *team.money) > (high_bid.cap * high_bid.money):
+			second_bid = (high_bid.cap * high_bid.money)
 			high_bid = team
 			
 	m = high_bid.money
-	high_bid.money = m - (high_bid.cap *high_bid.money)
+	
+	if second_bid:
+		high_bid.money = m - second_bid
+	else:
+		high_bid.money = m - (high_bid.cap *high_bid.money)
 	
 	high_bid.pitch_roster.append(position)
 	high_bid.roster.append(player)
@@ -126,11 +139,11 @@ def pitch_auction():
 		
 	
 			
-TeamA = Team(hit=.5,cap=.21)
-TeamB = Team(hit=.5,cap=.22)
-TeamC = Team(hit=.5,cap=.23)
-TeamD = Team(hit=.5,cap=.24)
-TeamE = Team(hit=.5,cap=.25)
+TeamA = Team(hit=.5,cap=.2)
+TeamB = Team(hit=.5,cap=.12)
+TeamC = Team(hit=.5,cap=.3)
+TeamD = Team(hit=.5,cap=.10)
+TeamE = Team(hit=.5,cap=.15)
 TeamF = Team(hit=.5,cap=.26)
 TeamG = Team(hit=.5,cap=.27)
 TeamH = Team(hit=.5,cap=.2)
@@ -144,8 +157,8 @@ while len(drafted) < 120:
 while len(drafted) < 200:
 	pitch_auction()
 	
-for line in TeamA.roster:
-	print(line)
+#for line in TeamA.roster:
+#	print(line)
 
 #for line in TeamB.roster:
 #	print(line)
