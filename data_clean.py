@@ -52,7 +52,7 @@ for row in data:
 	elif row[0] in str(of_data).strip('[]'):
 		row.append('OF')
 	else:
-		row.append('OF')
+		row.append('1B')
 		
 appender = []
 

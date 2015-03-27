@@ -11,9 +11,42 @@ avail_pitch = pickle.load(pitch_data)
 pitch_data.close()
 
  #need to develop draft program 
- #how to make the amount of money bid equal to cap times hit % of money?????
+ #make analyzer that shows wich team has the best stats
  #
  
+def stat_sum():	
+	for team in team_list:
+		pitch = []
+		hit = []
+		roster = team.roster
+		w=0; era=0; sv=0; ip=0; so=0; whip=0
+		hr=0; r=0; rbi=0; sb=0; ave=0; obp=0
+		for player in team.roster:			 
+			if player[8] == 'P':
+				pitch.append(player[2:8])	
+			else:
+				hit.append(player[2:9])
+				
+		for line in pitch:
+			w = w + int(line[0])
+			era = era + float(line[1])/int(line[3])
+			sv = sv + int(line[2])
+			ip = ip + int(line[3])
+			so = so + int(line[4])			
+			whip = whip + float(line[5])/int(line[3])
+		team.stats.append([w, era, sv, ip, so, whip])
+		
+		for line in hit:
+			hr = hr + int(line[1])
+			r = r + int(line[2])
+			rbi = rbi + int(line[3])
+			sb = sb + int(line[4])
+			ave = ave + float(line[5])*int(line[0])
+			obp = obp + float(line[6])*int(line[0])
+		team.stats.append([hr,r,rbi,sb,ave,obp])
+		
+		#need to add compare of all stats to award point
+		
 def auctionPlayer(name):
 	profile = []
 	for row in avail_hit:
@@ -32,7 +65,7 @@ def auctionPlayer(name):
 	
 class Team:
 	def __init__(self, hit, cap, roster = None, hit_roster = None, pitch_roster = None, 
-	needs = None, money= None, hit_money = None, pitch_money = None):
+	needs = None, money= None, hit_money = None, pitch_money = None, stats = None):
 		if roster is None: roster = []
 		if hit_roster is None: hit_roster = []
 		if pitch_roster is None: pitch_roster = []
@@ -40,7 +73,7 @@ class Team:
 		if money is None: money = 250
 		if hit_money is None: hit_money = (money*hit)
 		if pitch_money is None: pitch_money= (money*(1-hit))
-		
+		if stats is None: stats = []
 		self.hit = hit
 		self.roster = roster
 		self.hit_roster = hit_roster
@@ -50,14 +83,15 @@ class Team:
 		self.money = money
 		self.hit_money = hit_money
 		self.pitch_money = pitch_money
+		self.stats = stats
 		
 	
 def checkNeed(team):
-	if team.hit_roster.count('C') == 2 and 'C' in team.needs:
+	if team.hit_roster.count('C') == 1 and 'C' in team.needs:
 		del team.needs[team.needs.index('C')]
 	if team.hit_roster.count('1B')==2 and '1B' in team.needs:
 		del team.needs[team.needs.index('1B')]
-	if team.hit_roster.count('2B') == 2 and '2B' in team.needs:
+	if team.hit_roster.count('2B') == 1 and '2B' in team.needs:
 		del team.needs[team.needs.index('2B')]
 	if team.hit_roster.count('SS') == 1 and 'SS' in team.needs:
 		del team.needs[team.needs.index('SS')]
@@ -65,7 +99,7 @@ def checkNeed(team):
 		del team.needs[team.needs.index('3B')]
 	if team.hit_roster.count('OF') == 4 and 'OF' in team.needs:
 		del team.needs[team.needs.index('OF')]
-	if team.hit_roster.count('U') == 4 and 'U' in team.needs:
+	if team.hit_roster.count('U') == 5 and 'U' in team.needs:
 		del team.needs[team.needs.index('U')]
 	if team.pitch_roster.count('P') == 10 and 'P' in team.needs:
 		del team.needs[team.needs.index('P')]
@@ -74,7 +108,7 @@ def checkNeed(team):
 	
 def hit_auction():
 	player = avail_hit[1]
-	position = avail_hit[1][8]
+	position = avail_hit[1][9]
 	bidders = []
 		
 	for team in team_list:
@@ -105,14 +139,11 @@ def hit_auction():
 		drafted.append(position)
 		del avail_hit[1]
 		checkNeed(high_bid)		
-		
+
 	else:
 		del avail_hit[1]
 	
-	#print(TeamA.hit_money)
-	
-	
-	
+		
 def pitch_auction():
 	player = avail_pitch[1]
 	position = 'P'
@@ -142,11 +173,9 @@ def pitch_auction():
 	drafted.append(position)
 	del avail_pitch[1]
 	checkNeed(high_bid)
-	print(TeamG.pitch_money)			
-		
 	
 			
-TeamA = Team(hit=.5,cap=.2)
+TeamA = Team(hit=.6,cap=.2)
 TeamB = Team(hit=.5,cap=.12)
 TeamC = Team(hit=.5,cap=.3)
 TeamD = Team(hit=.5,cap=.10)
@@ -158,14 +187,20 @@ team_list = [TeamA, TeamB, TeamC, TeamD, TeamE, TeamF, TeamG, TeamH]
 
 drafted = []
 
-
 while len(drafted) < 120:
 	hit_auction()
+	
+
 while len(drafted) < 200:
 	pitch_auction()
-	
-for line in TeamA.roster:
-	print(line)
 
-#for line in TeamB.roster:
+#for line in avail_hit:
+#	print(line)
+	
+stat_sum()	
+#for team in team_list:
+#	print(team.needs)
+
+
+#for line in TeamF.roster:
 #	print(line)
