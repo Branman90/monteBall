@@ -11,9 +11,8 @@ avail_pitch = pickle.load(pitch_data)
 pitch_data.close()
 
  #need to develop draft program 
- #should have the ability to put player up for acution and have teams bid on 
- #that player until they hit a cap or get to a level that makes drafting him unfavorable
- #Start with auctioned player
+ #add in pitcher auction
+ #
  
 def auctionPlayer(name):
 	profile = []
@@ -26,15 +25,20 @@ def auctionPlayer(name):
 					profile.append(row)
 				else:
 					pass
-	#print(profile)
+	
 	stats = profile[0][2:8]
-	#print(stats)
 	position = profile[0][8]
-	#print(position)
+	
 	
 class Team:
-	def __init__(self, hit, cap, roster = [], hit_roster= [], pitch_roster = [], 
-	needs=['C', '1B', '2B', '3B','SS','OF', 'U', 'P'], money =250):
+	def __init__(self, hit, cap, roster = None, hit_roster = None, pitch_roster = None, 
+	needs = None, money= None):
+		if roster is None: roster = []
+		if hit_roster is None: hit_roster = []
+		if pitch_roster is None: pitch_roster = []
+		if needs is None: needs = ['C', '1B', '2B', '3B','SS','OF', 'U', 'P']
+		if money is None: money = 250
+		
 		self.hit = hit
 		self.roster = roster
 		self.hit_roster = hit_roster
@@ -44,26 +48,6 @@ class Team:
 		self.money = money
 		
 	
-#write draft function
-'''def draft():
-	x = 1
-	total_need = ['C', '1B', '2B', '3B', 'SS', 'OF', 'U', 'P']
-	total_drafted = []
-	#all drafting the same players...
-	while x <= 200:
-		for team in team_list:
-			if len(team.hit_roster) < len(team.pitch_roster):
-				team.roster.append(avail_hit[1])
-				team.hit_roster.append(avail_hit[1][8])
-				del avail_hit[1]
-				print(avail_hit[1])
-			else:
-				team.roster.append(avail_pitch[1])
-				team.pitch_roster.append(avail_pitch[1][8])
-				del avail_pitch[1]
-			
-			x+=1'''
-		
 def checkNeed(team):
 	if team.hit_roster.count('C') == 2 and 'C' in team.needs:
 		del team.needs[team.needs.index('C')]
@@ -77,52 +61,91 @@ def checkNeed(team):
 		del team.needs[team.needs.index('3B')]
 	if team.hit_roster.count('OF') == 4 and 'OF' in team.needs:
 		del team.needs[team.needs.index('OF')]
+	if team.hit_roster.count('U') == 4 and 'U' in team.needs:
+		del team.needs[team.needs.index('U')]
+	if team.pitch_roster.count('P') == 10 and 'P' in team.needs:
+		del team.needs[team.needs.index('P')]
 		
 	
 	
-def auction():
+def hit_auction():
 	player = avail_hit[1]
 	position = avail_hit[1][8]
 	bidders = []
+		
+	for team in team_list:
+		if position in team.needs or 'U' in team.needs:
+			bidders.append(team)
+			
+	if bidders:
+		high_bid = bidders[0]
+		#change the draft bid parameters here
+		for team in bidders:
+			if(team.cap * team.money) > (high_bid.cap * high_bid.money):
+				high_bid = team
 	
+		m = high_bid.money
+		high_bid.money = m - (high_bid.cap *high_bid.money)
+		
+		if position in high_bid.needs:
+			high_bid.hit_roster.append(position)
+		else:
+			high_bid.hit_roster.append('U')
+			
+		high_bid.roster.append(player)
+		drafted.append(position)
+		del avail_hit[1]
+		checkNeed(high_bid)		
+		
+	else:
+		del avail_hit[1]
+	
+def pitch_auction():
+	player = avail_pitch[1]
+	position = 'P'
+	bidders = []
 	
 	for team in team_list:
 		if position in team.needs:
 			bidders.append(team)
+	
 	high_bid = bidders[0]
 	for team in bidders:
-		if(team.cap * team.money) > (high_bid.cap * high_bid.money):
+		if (team.cap *team.money) > (high_bid.cap * high_bid.money):
 			high_bid = team
-	print(high_bid.cap)
+			
 	m = high_bid.money
 	high_bid.money = m - (high_bid.cap *high_bid.money)
-		
-	high_bid.hit_roster.append(position)
+	
+	high_bid.pitch_roster.append(position)
 	high_bid.roster.append(player)
-	del avail_hit[1]
+	drafted.append(position)
+	del avail_pitch[1]
 	checkNeed(high_bid)
-
-
+				
 		
-		
-		
-Team1 = Team(hit=.5,cap=.21)
-Team2 = Team(hit=.5,cap=.22)
-Team3 = Team(hit=.5,cap=.23)
-Team4 = Team(hit=.5,cap=.24)
-Team5 = Team(hit=.5,cap=.25)
-Team6 = Team(hit=.5,cap=.26)
-Team7 = Team(hit=.5,cap=.27, needs=['C','1B','2B','SS','3B','OF'])
-Team8 = Team(hit=.5,cap=.2)
-team_list = [Team1, Team2, Team3, Team4, Team5, Team6, Team7, Team8]
-auction()
+	
+			
+TeamA = Team(hit=.5,cap=.21)
+TeamB = Team(hit=.5,cap=.22)
+TeamC = Team(hit=.5,cap=.23)
+TeamD = Team(hit=.5,cap=.24)
+TeamE = Team(hit=.5,cap=.25)
+TeamF = Team(hit=.5,cap=.26)
+TeamG = Team(hit=.5,cap=.27)
+TeamH = Team(hit=.5,cap=.2)
+team_list = [TeamA, TeamB, TeamC, TeamD, TeamE, TeamF, TeamG, TeamH]
 
-#while loop is not working all players still being added to all teams. 
-'''x = 1
-while x < 50:
-	auction()
-	x+=1'''
-#print(Team7.roster)
-#print(Team5.roster)
+drafted = []
 
-#print(Team1.roster)
+
+while len(drafted) < 120:
+	hit_auction()
+while len(drafted) < 200:
+	pitch_auction()
+	
+for line in TeamA.roster:
+	print(line)
+
+#for line in TeamB.roster:
+#	print(line)

@@ -51,6 +51,8 @@ for row in data:
 		row.append('3B')
 	elif row[0] in str(of_data).strip('[]'):
 		row.append('OF')
+	else:
+		row.append('OF')
 		
 appender = []
 
