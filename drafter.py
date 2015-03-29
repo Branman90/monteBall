@@ -422,7 +422,7 @@ def play():
 
 victors =  []
 x=0
-while x <= 10000:
+while x <= 100000:
 	play()
 	x+=1
 
